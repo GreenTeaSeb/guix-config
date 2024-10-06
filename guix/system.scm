@@ -20,6 +20,8 @@
 		     rsync
 		     tls
 		     shells
+         audio
+         linux
 		     networking)
 
 (use-service-modules cups desktop networking ssh dbus docker nix )
@@ -53,6 +55,9 @@
 			  zsh
         docker-compose
         mariadb
+        bluez-alsa
+        bluez
+        blueman
 			  dbus)
 		    %base-packages))
 
@@ -61,10 +66,13 @@
             (service cups-service-type)
             (service containerd-service-type) 
             (service docker-service-type) 
-            (service bluetooth-service-type)
+            (service bluetooth-service-type
+              (bluetooth-configuration
+                (auto-enable? #t)))
             (service nix-service-type
               (nix-configuration
-                 (extra-config `("trusted-users = root sveb") )))
+                 (extra-config `("trusted-users = root sveb\n"
+                                 "experimental-features = nix-command flakes\n"))))
 
   		      (modify-services %desktop-services
                      (delete gdm-service-type))))

@@ -27,10 +27,12 @@
 					    "helix"
 							"font-jetbrainsmono-nerd"
 							"font-monaspace-nerd"
+					    "font-google-noto-sans-cjk"
+					    "font-google-noto"
+							"yaru-theme"
 					    "j4-dmenu-desktop"
 							"direnv"
 							"shared-mime-info"
-					    "xdg-desktop-portal" ;; for screen sharing
 					    "xdg-desktop-portal-wlr"
 					    "xdg-desktop-portal-gtk"
 					    "xdg-user-dirs"
@@ -40,8 +42,6 @@
 					    "waybar"
 					    "mesa-utils"
 					    "qtwayland"
-					    "font-google-noto-sans-cjk"
-					    "font-google-noto"
 					    "eza"
 					    "grimshot"
 					    "zsh-autosuggestions"
@@ -56,41 +56,50 @@
 		    (zshrc (list (local-file ".zshrc" "zshrc")))
 		    (zprofile (list (local-file ".zprofile" "zprofile")))))
 
-     	 (service home-dbus-service-type)
+  	(service home-dbus-service-type)
 
-	 (service home-pipewire-service-type)
+		(service home-pipewire-service-type)
 
-	 (simple-service `sway-conf home-xdg-configuration-files-service-type
-		  (list `("sway/config", (local-file "sway/config"))
-			`("sway/colors", (local-file "sway/colors")))
-	 )
+		(simple-service `sway-conf home-xdg-configuration-files-service-type
+			  (list `("sway", (local-file "sway" #:recursive? #t)))
+		)
 	
-	 (simple-service `waybar-conf home-xdg-configuration-files-service-type
-		  (list `("waybar/config", (local-file "waybar/config"))
-			`("waybar/style.css", (local-file "waybar/style.css")))
-	 )
+		(simple-service `waybar-conf home-xdg-configuration-files-service-type
+			  (list `("waybar", (local-file "waybar" #:recursive? #t)))
+		)
 
-	 (simple-service `xdg-user-dirs home-xdg-configuration-files-service-type 
+		(simple-service `nix-conf home-xdg-configuration-files-service-type
+			  (list `("nix", (local-file "nix" #:recursive? #t)))
+		)
+
+		(simple-service `fish-conf home-xdg-configuration-files-service-type
+			  (list `("fish", (local-file "fish" #:recursive? #t)))
+		)
+
+		(simple-service `xdg-user-dirs home-xdg-configuration-files-service-type 
 			 `(("user-dirs.dirs", (plain-file "user-dirs.dirs" (string-append
-										"XDG_DESKTOP_DIR=\"$HOME/Desktop\"\n"
-										"XDG_DOCUMENTS_DIR=\"$HOME/Documents\"\n"
-										"XDG_DOWNLOAD_DIR=\"$HOME/Downloads\"\n"
-										"XDG_MUSIC_DIR=\"$HOME/Music\"\n"
-										"XDG_PICTURES_DIR=\"$HOME/Pictures\"\n"
-										"XDG_PUBLICSHARE_DIR=\"$HOME/Public\"\n"
-										"XDG_TEMPLATES_DIR=\"$HOME/Templates\"\n"
-										"XDG_VIDEOS_DIR=\"$HOME/Videos\"\n")))))
+											"XDG_DESKTOP_DIR=\"$HOME/Desktop\"\n"
+											"XDG_DOCUMENTS_DIR=\"$HOME/Documents\"\n"
+											"XDG_DOWNLOAD_DIR=\"$HOME/Downloads\"\n"
+											"XDG_MUSIC_DIR=\"$HOME/Music\"\n"
+											"XDG_PICTURES_DIR=\"$HOME/Pictures\"\n"
+											"XDG_PUBLICSHARE_DIR=\"$HOME/Public\"\n"
+											"XDG_TEMPLATES_DIR=\"$HOME/Templates\"\n"
+											"XDG_VIDEOS_DIR=\"$HOME/Videos\"\n")))))
 
-	 (simple-service `env home-environment-variables-service-type
-                          '(("XDG_CURRENT_DESKTOP" . "sway")
-                            ("XDG_SESSION_TYPE" . "wayland")
-                            ("RTC_USE_PIPEWIRE" . "true")
-                            ("SDL_VIDEODRIVER" . "wayland")
-                            ("MOZ_ENABLE_WAYLAND" . "1")
-                            ("CLUTTER_BACKEND" . "wayland")
-                            ("ELM_ENGINE" . "wayland_egl")
-                            ("ECORE_EVAS_ENGINE" . "wayland-egl")
-                            ("QT_QPA_PLATFORM" . "wayland-egl")
-                            ("_JAVA_AWT_WM_NONREPARENTING" . "1")
-														("NIX_CONF_DIR" . "$XDG_CONFIG_HOME/nix/")
-			    ("XDG_DATA_DIRS" . "/home/sveb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$XDG_DATA_DIRS"))))))
+		(simple-service `env home-environment-variables-service-type
+	                          '(("XDG_CURRENT_DESKTOP" . "sway")
+	                            ("XDG_SESSION_TYPE" . "wayland")
+	                            ("RTC_USE_PIPEWIRE" . "true")
+	                            ("SDL_VIDEODRIVER" . "wayland")
+	                            ("MOZ_ENABLE_WAYLAND" . "1")
+	                            ("CLUTTER_BACKEND" . "wayland")
+	                            ("ELM_ENGINE" . "wayland_egl")
+	                            ("ECORE_EVAS_ENGINE" . "wayland-egl")
+	                            ("QT_QPA_PLATFORM" . "wayland-egl")
+	                            ("_JAVA_AWT_WM_NONREPARENTING" . "1")
+															("NIX_CONF_DIR" . "$XDG_CONFIG_HOME/nix/")
+															("QT_QPA_PLATFORMTHEME" . "qt5ct:qt6ct")
+															("XDG_MENU_PREFIX" . "arch-")
+				    									("XDG_DATA_DIRS" . "/home/sveb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$XDG_DATA_DIRS"))))))
+

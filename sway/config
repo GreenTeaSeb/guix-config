@@ -34,7 +34,7 @@ set $opacity 0.90
 for_window [class=".*"] opacity $opacity
 for_window [app_id="firefox"] opacity 1;
 
-output * bg /home/sveb/src/static/wallpaper.jpg fill
+output * bg /home/sveb/src/static/current fill
 
 # target                 title     bg    text   indicator  border
 client.focused           $lavender $base $text  $rosewater $lavender
