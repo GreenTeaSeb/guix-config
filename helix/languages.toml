@@ -1,0 +1,14 @@
+[[language]]
+name = "javascript"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "javascript"] }
+
+[language-server.solargraph]
+config.diagnostics=true
+config.formatting=false
+
+[[language]]
+name = "ruby"
+formatter = { command = "rubocop", args = ["--stdin", "foo.rb", "-a", "--stderr", "--fail-level", "fatal"] }
+auto-format = true
+language-servers=[{name="solargraph"}]

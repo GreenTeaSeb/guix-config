@@ -23,8 +23,12 @@
 					    "dolphin"
 					    "gwenview"
 							"bluedevil"
+							"qbittorrent"
 					    "kitty"
 					    "helix"
+							"emacs"
+							"icedove-wayland"
+							"vlc"
 							"font-jetbrainsmono-nerd"
 							"font-monaspace-nerd"
 					    "font-google-noto-sans-cjk"
@@ -33,6 +37,9 @@
 					    "j4-dmenu-desktop"
 							"direnv"
 							"shared-mime-info"
+							"qtwayland"
+							"qt5ct"
+							"lxappearance"
 					    "xdg-desktop-portal-wlr"
 					    "xdg-desktop-portal-gtk"
 					    "xdg-user-dirs"
@@ -41,9 +48,9 @@
 					    "mako"
 					    "waybar"
 					    "mesa-utils"
-					    "qtwayland"
 					    "eza"
 					    "grimshot"
+							"zsh-powerlevel10k"
 					    "zsh-autosuggestions"
 					    "zsh-completions"
 					    "zsh-autopair"
@@ -76,6 +83,18 @@
 			  (list `("fish", (local-file "fish" #:recursive? #t)))
 		)
 
+		(simple-service `emacs-conf home-xdg-configuration-files-service-type
+			  (list `("emacs", (local-file "emacs" #:recursive? #t)))
+		)
+
+		(simple-service `helix-conf home-xdg-configuration-files-service-type
+			  (list `("helix", (local-file "helix" #:recursive? #t)))
+		)
+
+		; (simple-service `antidote-conf home-xdg-configuration-files-service-type
+		; 	  (list `("zsh", (local-file "antidote" #:recursive? #t)))
+		; )
+
 		(simple-service `xdg-user-dirs home-xdg-configuration-files-service-type 
 			 `(("user-dirs.dirs", (plain-file "user-dirs.dirs" (string-append
 											"XDG_DESKTOP_DIR=\"$HOME/Desktop\"\n"
@@ -96,10 +115,10 @@
 	                            ("CLUTTER_BACKEND" . "wayland")
 	                            ("ELM_ENGINE" . "wayland_egl")
 	                            ("ECORE_EVAS_ENGINE" . "wayland-egl")
-	                            ("QT_QPA_PLATFORM" . "wayland-egl")
+	                            ("QT_QPA_PLATFORM" . "")
+															("QT_QPA_PLATFORMTHEME" . "qt5ct")
 	                            ("_JAVA_AWT_WM_NONREPARENTING" . "1")
 															("NIX_CONF_DIR" . "$XDG_CONFIG_HOME/nix/")
-															("QT_QPA_PLATFORMTHEME" . "qt5ct:qt6ct")
 															("XDG_MENU_PREFIX" . "arch-")
 				    									("XDG_DATA_DIRS" . "/home/sveb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$XDG_DATA_DIRS"))))))
 
