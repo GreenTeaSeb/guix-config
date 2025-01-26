@@ -1,6 +1,5 @@
 (use-modules (gnu)
 	     (gnu packages)
-	     (sveb packages helix)
 	     (sveb packages fonts)
        (gnu services)
 	     (guix channels)
@@ -15,17 +14,20 @@
 (home-environment
   (packages (specifications->packages (list "firefox"
 					    "darktable"
-              "glibc-locales"
+              				    "glibc-locales"
 					    "signal-desktop"
 					    "pavucontrol"
 					    "bemenu"
 					    "okular"
 					    "dolphin"
+					    "zoxide"
+					    "fzf"
+					    "python"
 					    "gwenview"
 							"bluedevil"
 							"qbittorrent"
 					    "kitty"
-					    "helix"
+					    "j4-dmenu-desktop"
 							"emacs"
 							"icedove-wayland"
 							"vlc"
@@ -50,7 +52,6 @@
 					    "mesa-utils"
 					    "eza"
 					    "grimshot"
-							"zsh-powerlevel10k"
 					    "zsh-autosuggestions"
 					    "zsh-completions"
 					    "zsh-autopair"
@@ -91,10 +92,13 @@
 			  (list `("helix", (local-file "helix" #:recursive? #t)))
 		)
 
-		; (simple-service `antidote-conf home-xdg-configuration-files-service-type
-		; 	  (list `("zsh", (local-file "antidote" #:recursive? #t)))
-		; )
+		(simple-service `antidote-conf home-xdg-configuration-files-service-type
+		 	  (list `("zsh/.zsh_plugins.txt", (local-file "antidote/zsh_plugins.txt" #:recursive? #t)))
+		)
 
+		(simple-service `podman-conf home-xdg-configuration-files-service-type
+			  (list `("containers", (local-file "containers" #:recursive? #t)))
+		)
 		(simple-service `xdg-user-dirs home-xdg-configuration-files-service-type 
 			 `(("user-dirs.dirs", (plain-file "user-dirs.dirs" (string-append
 											"XDG_DESKTOP_DIR=\"$HOME/Desktop\"\n"

@@ -4,8 +4,8 @@
   (gnu services databases)
 	(gnu services desktop)
 	(gnu services xorg)
-  (gnu packages docker)
   (gnu packages databases)
+  (gnu packages containers)
 	(nongnu packages linux))
 
 (use-package-modules wm
@@ -41,7 +41,7 @@
                   (group "users")
 		  (shell (file-append zsh "/bin/zsh"))
                   (home-directory "/home/sveb")
-                  (supplementary-groups '("wheel" "netdev" "audio" "video" "docker")))
+                  (supplementary-groups '("wheel" "netdev" "audio" "video")))
                 %base-user-accounts))
 
   (packages (append (list swayfx
@@ -52,8 +52,11 @@
 			  polkit
 			  rsync
 			  openssl
+			  podman
+			  slirp4netns
+			  podman-compose
+			  passt
 			  zsh
-        docker-compose
         mariadb
         bluez-alsa
         bluez
@@ -65,7 +68,6 @@
     (cons*	(service openssh-service-type)
             (service cups-service-type)
             (service containerd-service-type) 
-            (service docker-service-type) 
             (service bluetooth-service-type
               (bluetooth-configuration
                 (auto-enable? #t)))
@@ -73,7 +75,11 @@
               (nix-configuration
                  (extra-config `("trusted-users = root sveb\n"
                                  "experimental-features = nix-command flakes\n"))))
-
+            (service iptables-service-type
+               (iptables-configuration))
+            (simple-service `podman-subuid-subgid etc-service-type
+              `(("subuid", (plain-file "subuid" (string-append "sveb" ":100000:65536\n")))
+                ("subgid", (plain-file "subgid" (string-append "sveb" ":100000:65536\n")))))
   		      (modify-services %desktop-services
                      (delete gdm-service-type))))
 
@@ -94,7 +100,7 @@
                        (file-system
                          (mount-point "/")
                          (device (uuid
-                                  "707929ca-208c-469f-982d-72357f878b7d"
+                                  "f1ec34eb-48c0-4e48-a12d-5644f6f8c5dc"
                                   'ext4))
                          (type "ext4"))
                        (file-system
