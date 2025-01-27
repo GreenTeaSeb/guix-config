@@ -46,7 +46,6 @@
 
   (packages (append (list swayfx
 			  neovim
-        nix
 			  git
 			  flatpak
 			  polkit
