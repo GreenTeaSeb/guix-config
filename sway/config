@@ -4,7 +4,7 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term kitty
+set $term konsole
 set $menu j4-dmenu-desktop --dmenu='bemenu -i -l 10'
 exec mako
 
@@ -75,15 +75,22 @@ client.background        $base
 
 # SHORTCUTS:
     bindsym Print exec grimshot copy area
+
     bindsym XF86AudioRaiseVolume exec pamixer -i 5
     bindsym XF86AudioLowerVolume exec pamixer -d 5
 
+    bindsym XF86AudioPlay exec playerctl play-pause
+    bindsym XF86AudioPause exec playerctl pause
+
+    bindsym XF86AudioNext exec playerctl next
+    bindsym XF86AudioPrev exec playerctl previous
+    
     bindsym XF86MonBrightnessUp exec light -A 5
     bindsym XF86MonBrightnessDown exec light -U 5
 
     bindsym $mod+Alt+l exec swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 1 --fade-in 0.0
-    bindsym $mod+Alt+o exec /usr/lib/xscreensaver/unknownpleasures   
     bindsym $mod+o exec pavucontrol
+    bindsym $mod+insert exec swaymsg rename workspace to $(echo | bemenu -p "Rename workspace to: ")
 
 # FLOATING WINDOWS:
     for_window [app_id="pavucontrol"] floating enable
@@ -164,6 +171,8 @@ bar {
 }
 
 for_window [class="UnknownPleasures"] fullscreen enable
+exec kdeconnectd
+exec otd-daemon
 exec dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway DISPLAY
 
 include /etc/sway/config.d/*

@@ -1,6 +1,7 @@
 theme = "custom-monokai"
 
 [editor]
+auto-format = true
 bufferline = "multiple"
 cursorline = true
 line-number = "relative"
@@ -18,4 +19,3 @@ render = true
 
 [keys.insert]
 C-space = "completion"
-

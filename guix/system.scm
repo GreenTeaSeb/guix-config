@@ -6,6 +6,7 @@
 	(gnu services xorg)
   (gnu packages databases)
   (gnu packages containers)
+  (gnu packages kde-plasma)
 	(nongnu packages linux))
 
 (use-package-modules wm
@@ -26,6 +27,10 @@
 
 (use-service-modules cups desktop networking ssh dbus docker nix )
 
+(define %opentabletdriver-udev
+  (file->udev-rule "70-opentabletdriver.rules"
+                   (local-file "../opentabletdriver/70-opentabletdriver.rules")))
+
 (operating-system
   (kernel linux)
   (firmware (list linux-firmware
@@ -45,6 +50,8 @@
                 %base-user-accounts))
 
   (packages (append (list swayfx
+        niri
+        plasma-desktop
 			  neovim
 			  git
 			  flatpak
@@ -79,11 +86,14 @@
             (simple-service `podman-subuid-subgid etc-service-type
               `(("subuid", (plain-file "subuid" (string-append "sveb" ":100000:65536\n")))
                 ("subgid", (plain-file "subgid" (string-append "sveb" ":100000:65536\n")))))
+            (udev-rules-service 'opentabletdriver %opentabletdriver-udev)
   		      (modify-services %desktop-services
                      (delete gdm-service-type))))
 
 
   (name-service-switch %mdns-host-lookup-nss)
+
+  (kernel-arguments (cons "modprobe.blacklist=hid-uclogic" %default-kernel-arguments))
 
   (bootloader (bootloader-configuration
                 (bootloader grub-efi-bootloader)

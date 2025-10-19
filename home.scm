@@ -12,51 +12,92 @@
 	     (gnu home services guix))
 
 (home-environment
-  (packages (specifications->packages (list "firefox"
-					    "darktable"
-              				    "glibc-locales"
-					    "signal-desktop"
-					    "pavucontrol"
-					    "bemenu"
-					    "okular"
-					    "dolphin"
-					    "zoxide"
-					    "fzf"
-					    "python"
-					    "gwenview"
-							"bluedevil"
-							"qbittorrent"
-					    "kitty"
-					    "j4-dmenu-desktop"
-							"emacs"
-							"icedove-wayland"
-							"vlc"
-							"font-jetbrainsmono-nerd"
-							"font-monaspace-nerd"
-					    "font-google-noto-sans-cjk"
-					    "font-google-noto"
-							"yaru-theme"
-					    "j4-dmenu-desktop"
-							"direnv"
-							"shared-mime-info"
-							"qtwayland"
-							"qt5ct"
-							"lxappearance"
-					    "xdg-desktop-portal-wlr"
-					    "xdg-desktop-portal-gtk"
-					    "xdg-user-dirs"
-					    "xdg-utils"
-					    "flatpak-xdg-utils"
-					    "mako"
-					    "waybar"
-					    "mesa-utils"
-					    "eza"
-					    "grimshot"
-					    "zsh-autosuggestions"
-					    "zsh-completions"
-					    "zsh-autopair"
-					    "zsh-syntax-highlighting"
-					    "slurp")))
+  (packages (specifications->packages (list
+					;Applications
+						; "firefox"
+						"darktable"
+						"pavucontrol"
+						"okular"
+						"dolphin"
+						"gwenview"
+						"qbittorrent"
+						"kitty"
+						"konsole"
+						"emacs"
+						"icedove-wayland"
+						"vlc"
+						"vscodium"
+						"krita"
+						"calibre"
+						"qt-creator"
+
+					;Tools/utils:
+						"bemenu"
+						"zoxide"
+						"fzf"
+						"j4-dmenu-desktop"
+						"direnv"
+						"shared-mime-info"
+						"lxappearance"
+						"xdg-desktop-portal-wlr"
+						"xdg-desktop-portal-gtk"
+						"xdg-user-dirs"
+						"xdg-utils"
+						"flatpak-xdg-utils"
+						"mako"
+						"waybar"
+						"mesa-utils"
+						"grimshot"
+						"slurp"
+						"btop"
+						"curl"
+						"wine"
+						"distrobox"
+						"kvantum"
+						"qt6ct"
+						"qtwayland"
+						"qtbase"
+						"qtsvg"
+						"p7zip"
+						"libtree"
+						"patchelf"
+						"gcc-toolchain"
+						"playerctl"
+						
+						"kio"
+						"kparts"
+						"kconfig"
+						"kcoreaddons"
+						"kfilemetadata"
+						"kiconthemes"
+						"kio-extras"
+						"baloo"
+						"kactivities"
+						"kwayland-integration"
+						"kdeconnect"
+						
+					;Programming:
+						"python"
+						"gdb"
+						"openssl"
+						"go"
+						"ruby"
+
+					;Misc:
+						"glibc-locales"
+						"bluedevil"
+						"font-jetbrainsmono-nerd"
+						"font-monaspace-nerd"
+						"font-google-noto-sans-cjk"
+						"font-google-noto"
+						"yaru-theme"
+						"nss-certs"
+						"eza"
+						"zsh-autosuggestions"
+						"zsh-completions"
+						"zsh-autopair"
+						"zsh-syntax-highlighting"
+					    )))
 
   (services
    (list (service home-zsh-service-type
@@ -99,6 +140,15 @@
 		(simple-service `podman-conf home-xdg-configuration-files-service-type
 			  (list `("containers", (local-file "containers" #:recursive? #t)))
 		)
+
+		(simple-service `kdeglobals-conf home-xdg-configuration-files-service-type
+		 	  (list `("kdeglobals", (local-file "kde/kdeglobals")))
+		)
+
+		(simple-service `mimeapps-conf home-xdg-configuration-files-service-type
+		 	  (list `("mimeapps.list", (local-file "xdg/mimeapps.list")))
+		)
+		
 		(simple-service `xdg-user-dirs home-xdg-configuration-files-service-type 
 			 `(("user-dirs.dirs", (plain-file "user-dirs.dirs" (string-append
 											"XDG_DESKTOP_DIR=\"$HOME/Desktop\"\n"
@@ -119,9 +169,12 @@
 	                            ("CLUTTER_BACKEND" . "wayland")
 	                            ("ELM_ENGINE" . "wayland_egl")
 	                            ("ECORE_EVAS_ENGINE" . "wayland-egl")
-	                            ("QT_QPA_PLATFORM" . "")
-															("QT_QPA_PLATFORMTHEME" . "qt5ct")
+	                            ("QT_QPA_PLATFORM" . "wayland;xcb")
+															("QT_QPA_PLATFORMTHEME" . "qt6ct")
 	                            ("_JAVA_AWT_WM_NONREPARENTING" . "1")
+	                            ("SSL_CERT_DIR" . "$HOME/.guix-profile/etc/ssl/certs")
+	                            ("SSL_CERT_FILE" . "$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt")
+	                            ("GIT_SSL_CAINFO" . "$SSL_CERT_FILE")
 															("NIX_CONF_DIR" . "$XDG_CONFIG_HOME/nix/")
 															("XDG_MENU_PREFIX" . "arch-")
 				    									("XDG_DATA_DIRS" . "/home/sveb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$XDG_DATA_DIRS"))))))
