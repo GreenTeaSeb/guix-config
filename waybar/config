@@ -2,11 +2,9 @@
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar at the bottom of your screen
     "height": 24, // Waybar height
-    // "width": 1366, // Waybar width
-    // Choose the order of the modules
     "modules-left": ["niri/workspaces"],
     "modules-center": ["niri/window"],
-    "modules-right": ["pulseaudio", "network", "cpu", "memory", "battery", "tray", "clock"],
+    "modules-right": ["pulseaudio", "network", "cpu", "memory", "battery", "clock", "tray"],
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": false,
@@ -15,18 +13,14 @@
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
-    "tray": {
-        // "icon-size": 21,
-        "spacing": 10
-    },
     "clock": {
         "format-alt": "{:%Y-%m-%d}"
     },
     "cpu": {
-        "format": "{usage}% "
+        "format": "{usage}%   "
     },
     "memory": {
-        "format": "{}% "
+        "format": "{}%  "
     },
     "battery": {
         "bat": "BAT0",
@@ -38,23 +32,23 @@
         "format": "{capacity}% {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
-    },
+        "format-icons": [" ", " ", " ", " ", " "]
+    }, 
     "network": {
         // "interface": "wlp2s0", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
-        "format-disconnected": "Disconnected ⚠"
+        "format-wifi": "{essid} ({signalStrength}%)  ",
+        "format-ethernet": "{ifname}: {ipaddr}/{cidr}  ",
+        "format-disconnected": "Disconnected ⚠ "
     },
     "pulseaudio": {
         //"scroll-step": 1,
-        "format": "{volume}% {icon}",
-        "format-bluetooth": "{volume}% {icon}",
+        "format": "{volume}% {icon} ",
+        "format-bluetooth": "{volume}% {icon}  ",
         "format-muted": "",
         "format-icons": {
             "headphones": "",
-            "handsfree": "",
-            "headset": "",
+            "handsfree": "",
+            "headset": "",
             "phone": "",
             "portable": "",
             "car": "",
@@ -62,4 +56,8 @@
         },
         "on-click": "pavucontrol"
     },
+    "tray": {
+        "icon-size": 21,
+        "spacing": 10
+    }
 }

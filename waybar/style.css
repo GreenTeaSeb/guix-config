@@ -1,101 +1,122 @@
+@define-color accent_color #7fc8ff;
+
 * {
-    border: none;
-    border-radius: 0;
-    font-family: "JetBrainsMono NF";
-    font-size: 13px;
-    min-height: 0;
+  border: none;
+  border-radius: 8;
+  min-height: 0;
+  /* For the taskbar, I prefer simple Noto Sans.*/
+  font-family: Noto Sans;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  background: transparent;
 }
 
 window#waybar {
-    background: transparent;
-    color: white;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25)0%, rgba(100, 100, 100, 0.5)50%, rgba(100, 100, 100, 0.6)50%);
+  border-radius: 12px;
+  border-width: 1px;
+  border-bottom-width: 1px;
+  padding: 0px;
+
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+tooltip {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.15)50%, rgba(100, 100, 100, 0.2)50%, rgba(100, 100, 100, 0.3)50%);
+  color: white;
+
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-width: 1px;
+  border-top-color: rgba(255, 255, 255, 0.4);
+  border-bottom-color: rgba(255, 255, 255, 0.25);
 }
 
 #window {
-    font-weight: bold;
-    font-family: "Ubuntu";
+  color: white;
 }
-/*
-#workspaces {
-    padding: 0 5px;
+
+tooltip label {
+  color: white;
 }
-*/
+
+#battery,
+#network,
+#clock,
+#tray,
+#workspaces,
+#cpu,
+#memory,
+#pulseaudio {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(100, 100, 100, 0.025));
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
+  margin: 4px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: rgb(220, 220, 220);
+
+  border-style: none;
+  border-bottom-style: solid;
+  border-top-style: solid;
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+  border-top-color: rgba(255, 255, 255, 0.45);
+  border-width: 1px;
+}
+
+#tray menu {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.15));
+  color: rgba(220, 220, 220, 1);
+  padding: 4px;
+
+  border-style: none;
+  border-bottom-style: solid;
+  border-top-style: solid;
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+  border-top-color: rgba(255, 255, 255, 0.45);
+  border-width: 1px;
+
+}
+
+#tray menu menuitem {
+  margin: 3px;
+  color: rgb(220, 220, 220);
+}
+
+#tray menu menuitem:hover {
+  background-image: linear-gradient(to bottom, rgba(0, 255, 255, 0.15), rgba(0, 0, 0, 0.3), rgba(0, 255, 255, 0.15));
+  color: @accent_color;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+}
 
 #workspaces button {
-    padding: 0 5px;
-    background: transparent;
-    color: white;
-    border-top: 2px solid transparent;
+  transition-duration: 100ms;
+  all: initial;
+  min-width: 0;
+  color: rgb(220, 220, 220);
+  margin-right: 0.2cm;
+  margin-left: 0.2cm;
+  text-shadow: 0px 0px 4px rgb(135, 135, 135);
 }
+
+
 
 #workspaces button.focused {
-    color: #c9545d;
-    border-top: 2px solid #c9545d;
+  transition-duration: 120ms;
+  color: @accent_color;
 }
 
-#mode {
-    background: #64727D;
-    border-bottom: 3px solid white;
+
+#workspaces button.urgent {
+  color: #e78a4e;
+  text-shadow: 0px 0px 6px #e78a4e;
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
-    padding: 0 3px;
-    margin: 0 2px;
+#battery.warning,
+#battery.critical,
+#battery.urgent {
+  color: #fcf520;
 }
-
-#clock {
-    font-weight: bold;
-}
-
-#battery {
-}
-
-#battery icon {
-    color: red;
-}
-
-#battery.charging {
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
-}
-
-#battery.warning:not(.charging) {
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-#cpu {
-}
-
-#memory {
-}
-
-#network {
-}
-
-#network.disconnected {
-    background: #f53c3c;
-}
-
-#pulseaudio {
-}
-
-#pulseaudio.muted {
-}
-
-#custom-spotify {
-    color: rgb(102, 220, 105);
-}
-
-#tray {
-}
-

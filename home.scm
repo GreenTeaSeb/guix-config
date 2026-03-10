@@ -46,7 +46,11 @@
 						"flatpak-xdg-utils"
 						"mako"
 						"waybar"
+						"mesa"
+						"mesa-opencl"
 						"mesa-utils"
+						"meson"
+						"vulkan-tools"
 						"grimshot"
 						"slurp"
 						"btop"
@@ -58,11 +62,12 @@
 						"qtwayland"
 						"qtbase"
 						"qtsvg"
-						"p7zip"
+						"7zip"
 						"libtree"
 						"patchelf"
 						"gcc-toolchain"
 						"playerctl"
+						"fontconfig"
 						
 						"kio"
 						"kparts"
@@ -73,7 +78,6 @@
 						"kio-extras"
 						"baloo"
 						"kactivities"
-						"kwayland-integration"
 						"kdeconnect"
 						
 					;Programming:
@@ -90,6 +94,7 @@
 						"font-monaspace-nerd"
 						"font-google-noto-sans-cjk"
 						"font-google-noto"
+						"font-dejavu"
 						"yaru-theme"
 						"nss-certs"
 						"eza"
@@ -97,6 +102,7 @@
 						"zsh-completions"
 						"zsh-autopair"
 						"zsh-syntax-highlighting"
+						"sdl2"
 					    )))
 
   (services
@@ -132,7 +138,9 @@
 		(simple-service `helix-conf home-xdg-configuration-files-service-type
 			  (list `("helix", (local-file "helix" #:recursive? #t)))
 		)
-
+		(simple-service `niri-conf home-xdg-configuration-files-service-type
+			  (list `("niri", (local-file "niri" #:recursive? #t)))
+		)
 		(simple-service `antidote-conf home-xdg-configuration-files-service-type
 		 	  (list `("zsh/.zsh_plugins.txt", (local-file "antidote/zsh_plugins.txt" #:recursive? #t)))
 		)
@@ -161,7 +169,7 @@
 											"XDG_VIDEOS_DIR=\"$HOME/Videos\"\n")))))
 
 		(simple-service `env home-environment-variables-service-type
-	                          '(("XDG_CURRENT_DESKTOP" . "sway")
+	                          '(("XDG_CURRENT_DESKTOP" . "kiri")
 	                            ("XDG_SESSION_TYPE" . "wayland")
 	                            ("RTC_USE_PIPEWIRE" . "true")
 	                            ("SDL_VIDEODRIVER" . "wayland")
@@ -169,8 +177,9 @@
 	                            ("CLUTTER_BACKEND" . "wayland")
 	                            ("ELM_ENGINE" . "wayland_egl")
 	                            ("ECORE_EVAS_ENGINE" . "wayland-egl")
-	                            ("QT_QPA_PLATFORM" . "wayland;xcb")
+	                            ("QT_QPA_PLATFORM" . "xcb")
 															("QT_QPA_PLATFORMTHEME" . "qt6ct")
+															("QT_WAYLAND_DISABLE_WINDOWDECORATION" . "1")
 	                            ("_JAVA_AWT_WM_NONREPARENTING" . "1")
 	                            ("SSL_CERT_DIR" . "$HOME/.guix-profile/etc/ssl/certs")
 	                            ("SSL_CERT_FILE" . "$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt")

@@ -1,12 +1,17 @@
 (use-modules 
 	(gnu)
+  (gnu system privilege)
+  (gnu system shadow)
 	(gnu services)
   (gnu services databases)
 	(gnu services desktop)
+  (gnu services virtualization)
 	(gnu services xorg)
   (gnu packages databases)
   (gnu packages containers)
   (gnu packages kde-plasma)
+  (gnu packages libftdi)
+  (gnu packages virtualization)
 	(nongnu packages linux))
 
 (use-package-modules wm
@@ -24,8 +29,9 @@
          audio
          linux
 		     networking)
+ 
+(use-service-modules cups desktop networking ssh dbus docker nix virtualization containers )
 
-(use-service-modules cups desktop networking ssh dbus docker nix )
 
 (define %opentabletdriver-udev
   (file->udev-rule "70-opentabletdriver.rules"
@@ -46,7 +52,7 @@
                   (group "users")
 		  (shell (file-append zsh "/bin/zsh"))
                   (home-directory "/home/sveb")
-                  (supplementary-groups '("wheel" "netdev" "audio" "video")))
+                  (supplementary-groups '("wheel" "netdev" "audio" "video" "kvm" "libvirt")))
                 %base-user-accounts))
 
   (packages (append (list swayfx
@@ -64,6 +70,9 @@
 			  passt
 			  zsh
         mariadb
+        libvirt
+        libftdi
+        qemu
         bluez-alsa
         bluez
         blueman
@@ -74,6 +83,13 @@
     (cons*	(service openssh-service-type)
             (service cups-service-type)
             (service containerd-service-type) 
+            (service virtlog-service-type)
+            (service libvirt-service-type
+               (libvirt-configuration
+                (unix-sock-group "libvirt")
+                (tls-port "16555")))
+            (extra-special-file "/etc/qemu/host.conf"
+                    (plain-file "host.conf" "allow br0\n"))
             (service bluetooth-service-type
               (bluetooth-configuration
                 (auto-enable? #t)))
@@ -83,15 +99,36 @@
                                  "experimental-features = nix-command flakes\n"))))
             (service iptables-service-type
                (iptables-configuration))
-            (simple-service `podman-subuid-subgid etc-service-type
-              `(("subuid", (plain-file "subuid" (string-append "sveb" ":100000:65536\n")))
-                ("subgid", (plain-file "subgid" (string-append "sveb" ":100000:65536\n")))))
+            ; (simple-service `podman-subuid-subgid etc-service-type
+            ; `(("subuid", (plain-file "subuid" (string-append "sveb" ":100000:65536\n")))
+            ;   ("subgid", (plain-file "subgid" (string-append "sveb" ":100000:65536\n")))))
+            ; (simple-service 'podman-subuid-subgid 
+            ;     etc-service-type
+            ;     `(("subuid" ,(plain-file "subuid" "sveb:100000:65536\n"))
+            ;       ("subgid" ,(plain-file "subgid" "sveb:100000:65536\n"))))
+            (service subids-service-type
+              (subids-configuration
+                (add-root? #f)
+                (subuids (list (subid-range 
+                                 (name "sveb")
+                                 (start 100000)
+                                 (count 65536))))
+                (subgids (list (subid-range 
+                                 (name "sveb")
+                                 (start 100000)
+                                 (count 65536))))))
             (udev-rules-service 'opentabletdriver %opentabletdriver-udev)
   		      (modify-services %desktop-services
                      (delete gdm-service-type))))
 
 
   (name-service-switch %mdns-host-lookup-nss)
+
+  (privileged-programs
+   (cons (privileged-program
+         (program (file-append qemu "/libexec/qemu-bridge-helper"))
+         (setuid? #t))
+       %default-privileged-programs))
 
   (kernel-arguments (cons "modprobe.blacklist=hid-uclogic" %default-kernel-arguments))
 

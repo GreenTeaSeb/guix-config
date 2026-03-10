@@ -1,3 +1,19 @@
+environment {
+    JDK_JAVA_OPTIONS "-Dawt.useSystemAAFontSettings=lcd -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+    QT_QPA_PLATFORM "wayland-egl;xcb"
+}
+
+workspace "1"
+workspace "2"
+workspace "3"
+workspace "4"
+workspace "5"
+workspace "6"
+workspace "7"
+workspace "8"
+workspace "9"
+
 input {
     keyboard {
         xkb {
@@ -9,6 +25,7 @@ input {
 
     touchpad {
         tap
+        dwt
         natural-scroll
         scroll-method "two-finger"
     }
@@ -19,12 +36,12 @@ input {
     trackpoint {
     }
 
-    focus-follows-mouse max-scroll-amount="0%"
 }
 
 
 layout {
     gaps 16
+    background-color "transparent"
     center-focused-column "never"
     preset-column-widths {
         proportion 0.33333
@@ -52,6 +69,7 @@ layout {
 
 }
 spawn-at-startup "waybar"
+spawn-sh-at-startup "swaybg -i ~/src/static/wallpaper.jpg"
 
 hotkey-overlay {
     skip-at-startup
@@ -82,11 +100,34 @@ window-rule {
     open-floating true
 }
 
+window-rule {
+    match app-id="scrcpy"
+    open-floating false
+    open-maximized true
+}
+
+
 
 window-rule {
     geometry-corner-radius 4
     clip-to-geometry true
 }
+
+// Make the wallpaper stationary, rather than moving with workspaces.
+layer-rule {
+    // This is for swaybg; change for other wallpaper tools.
+    // Find the right namespace by running niri msg layers.
+    match namespace="^wallpaper$"
+    place-within-backdrop true
+}
+
+// Optionally, disable the workspace shadows in the overview.
+overview {
+    workspace-shadow {
+        off
+    }
+}
+
 
 binds {
      Mod+Shift+Slash { show-hotkey-overlay; }
@@ -104,6 +145,8 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
+    Mod+Shift+P hotkey-overlay-title="Switch to phone scrcpy" { spawn-sh "~/.local/bin/scrcpy_focus.sh"; }
+
     Mod+O repeat=false { toggle-overview; }
 
     Mod+Shift+Q repeat=false { close-window; }
@@ -117,28 +160,20 @@ binds {
     Mod+K     { focus-window-up; }
     Mod+L     { focus-column-right; }
 
-    Mod+Ctrl+Left  { move-column-left; }
-    Mod+Ctrl+Down  { move-window-down; }
-    Mod+Ctrl+Up    { move-window-up; }
-    Mod+Ctrl+Right { move-column-right; }
-    Mod+Ctrl+H     { move-column-left; }
-    Mod+Ctrl+J     { move-window-down; }
-    Mod+Ctrl+K     { move-window-up; }
-    Mod+Ctrl+L     { move-column-right; }
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Down  { move-window-down; }
+    Mod+Shift+Up    { move-window-up; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+H     { move-column-left; }
+    Mod+Shift+J     { move-window-down; }
+    Mod+Shift+K     { move-window-up; }
+    Mod+Shift+L     { move-column-right; }
 
     Mod+Home { focus-column-first; }
     Mod+End  { focus-column-last; }
     Mod+Ctrl+Home { move-column-to-first; }
     Mod+Ctrl+End  { move-column-to-last; }
 
-    Mod+Shift+Left  { focus-monitor-left; }
-    Mod+Shift+Down  { focus-monitor-down; }
-    Mod+Shift+Up    { focus-monitor-up; }
-    Mod+Shift+Right { focus-monitor-right; }
-    Mod+Shift+H     { focus-monitor-left; }
-    Mod+Shift+J     { focus-monitor-down; }
-    Mod+Shift+K     { focus-monitor-up; }
-    Mod+Shift+L     { focus-monitor-right; }
 
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
@@ -216,6 +251,7 @@ binds {
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
     Mod+9 { focus-workspace 9; }
+    Mod+0 { focus-workspace 10; }
     Mod+Ctrl+1 { move-column-to-workspace 1; }
     Mod+Ctrl+2 { move-column-to-workspace 2; }
     Mod+Ctrl+3 { move-column-to-workspace 3; }
@@ -225,6 +261,7 @@ binds {
     Mod+Ctrl+7 { move-column-to-workspace 7; }
     Mod+Ctrl+8 { move-column-to-workspace 8; }
     Mod+Ctrl+9 { move-column-to-workspace 9; }
+    Mod+Ctrl+0 { move-column-to-workspace 10; }
 
     // Alternatively, there are commands to move just a single window:
     // Mod+Ctrl+1 { move-window-to-workspace 1; }
@@ -312,5 +349,5 @@ binds {
 
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
-    Mod+Shift+P { power-off-monitors; }
+    Mod+Shift+O { power-off-monitors; }
 }
